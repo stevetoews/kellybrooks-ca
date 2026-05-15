@@ -18,7 +18,6 @@ paintings.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
           <img
             src={p.data.image}
             alt={p.data.title}
-            loading="lazy"
             decoding="async"
           />
         )}
@@ -28,38 +27,35 @@ paintings.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 </Layout>
 
 <script>
-  const items = document.querySelectorAll<HTMLElement>('.gallery-item');
-  let firstBatch = true;
+  function runCascade() {
+    const items = [...document.querySelectorAll<HTMLElement>('.gallery-item')];
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      // Sort visible items top-to-bottom, left-to-right for a natural cascade
-      const visible = entries
-        .filter(e => e.isIntersecting)
-        .sort((a, b) => {
-          const dy = a.boundingClientRect.top - b.boundingClientRect.top;
-          return dy !== 0 ? dy : a.boundingClientRect.left - b.boundingClientRect.left;
-        });
-
-      visible.forEach((entry, i) => {
-        const el = entry.target as HTMLElement;
-        // Initial load: generous stagger so the cascade reads clearly
-        // Scroll reveals: tighter stagger so it feels responsive
-        const stagger = firstBatch ? 130 : 80;
-        el.style.transitionDelay = `${i * stagger}ms`;
-        el.classList.add('visible');
-        observer.unobserve(el);
+    // Read real rendered positions — only valid after images have loaded and
+    // given the browser their natural dimensions.
+    const sorted = items
+      .map(el => ({ el, rect: el.getBoundingClientRect() }))
+      .sort((a, b) => {
+        // Bucket items into ~100px horizontal bands so items at the same
+        // visual height animate together before we break ties left → right.
+        const bandPx = 100;
+        const rowA = Math.floor(a.rect.top / bandPx);
+        const rowB = Math.floor(b.rect.top / bandPx);
+        return rowA !== rowB ? rowA - rowB : a.rect.left - b.rect.left;
       });
 
-      firstBatch = false;
-    },
-    {
-      threshold: 0.04,
-      rootMargin: '0px 0px -12px 0px',
-    }
-  );
+    sorted.forEach(({ el }, i) => {
+      el.style.transitionDelay = `${i * 120}ms`;
+      el.classList.add('visible');
+    });
+  }
 
-  items.forEach(item => observer.observe(item));
+  // window.load fires after every image has loaded and has natural dimensions,
+  // so getBoundingClientRect().top/.left are correct for the full masonry layout.
+  if (document.readyState === 'complete') {
+    runCascade();
+  } else {
+    window.addEventListener('load', runCascade, { once: true });
+  }
 </script>
 
 <style>
@@ -76,22 +72,19 @@ paintings.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
     display: block;
     overflow: hidden;
 
-    /* Start hidden */
     opacity: 0;
-    transform: translateY(10px);
-    transition:
-      opacity 1.1s ease,
-      transform 1.1s ease;
-  }
-
-  /* Hover brightness — only once visible so it doesn't flash on load */
-  .gallery-item.visible:hover {
-    opacity: 0.88;
+    transform: translateY(8px);
+    transition: opacity 1.1s ease, transform 1.1s ease;
   }
 
   .gallery-item.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Hover only after item is visible so there's no flash during load */
+  .gallery-item.visible:hover {
+    opacity: 0.87;
   }
 
   .gallery-item img {
