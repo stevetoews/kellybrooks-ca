@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Kelly Brooks — painter based in Vancouver, BC.' } = Astro.props;
+const siteTitle = title === 'Kelly Brooks' ? title : `${title} — Kelly Brooks`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{siteTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-white text-ink font-sans antialiased">
+    <slot name="header-above" />
+    <header class="border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="/" class="text-base font-medium tracking-wide hover:opacity-60 transition-opacity">
+          Kelly Brooks
+        </a>
+        <nav aria-label="Main navigation">
+          <ul class="flex gap-7 text-sm">
+            <li><a href="/shows/" class="hover:opacity-60 transition-opacity">Shows</a></li>
+            <li><a href="/bio/" class="hover:opacity-60 transition-opacity">Bio</a></li>
+            <li><a href="/blog/" class="hover:opacity-60 transition-opacity">Blog</a></li>
+            <li><a href="/contact/" class="hover:opacity-60 transition-opacity">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-100 mt-20">
+      <div class="max-w-7xl mx-auto px-6 py-8 text-center text-xs text-gray-400">
+        All images are copyright Kelly Brooks. &copy; 2010&thinsp;&ndash;&thinsp;2022 Kelly Brooks
+      </div>
+    </footer>
+  </body>
+</html>

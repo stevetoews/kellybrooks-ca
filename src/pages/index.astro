@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const paintings = await getCollection('paintings');
+paintings.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+---
+
+<Layout title="Kelly Brooks">
+  <div class="gallery-grid px-4 py-8 sm:px-6 lg:px-8">
+    {paintings.map((p) => (
+      <a
+        href={`/${p.id}/`}
+        class="gallery-item block overflow-hidden"
+        title={p.data.title}
+      >
+        {p.data.image && (
+          <img
+            src={p.data.image}
+            alt={p.data.title}
+            loading="lazy"
+            decoding="async"
+            class="w-full transition-opacity duration-300 hover:opacity-85"
+          />
+        )}
+      </a>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .gallery-grid {
+    columns: 1;
+    column-gap: 8px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      columns: 3;
+    }
+  }
+</style>

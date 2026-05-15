@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import contactData from '../data/pages/contact.json';
+---
+
+<Layout title={contactData.title || 'Contact'}>
+  <div class="max-w-2xl mx-auto px-6 py-16">
+    <h1 class="text-2xl font-medium mb-8">Contact</h1>
+    {contactData.html ? (
+      <div class="prose prose-sm max-w-none" set:html={contactData.html} />
+    ) : (
+      <p class="text-gray-600">
+        Enquiries about my paintings are welcome. Please reach out by email.
+      </p>
+    )}
+  </div>
+</Layout>

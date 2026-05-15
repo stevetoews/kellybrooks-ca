@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => {
+  const da = a.data.date || '';
+  const db = b.data.date || '';
+  return db.localeCompare(da); // newest first
+});
+
+function formatDate(dateStr: string) {
+  try {
+    return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-CA', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    });
+  } catch {
+    return dateStr;
+  }
+}
+---
+
+<Layout title="Blog">
+  <div class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-2xl font-medium mb-10">Blog</h1>
+
+    <ul class="divide-y divide-gray-100">
+      {posts.map((post) => (
+        <li class="py-5">
+          <a href={`/blog/${post.id}/`} class="group flex gap-5 items-start hover:opacity-80 transition-opacity">
+            {post.data.image && (
+              <img
+                src={post.data.image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width="72"
+                height="72"
+                class="w-[72px] h-[72px] object-cover shrink-0 bg-gray-50"
+              />
+            )}
+            <div class="flex-1 min-w-0">
+              <time class="text-xs text-gray-400 block mb-1">{formatDate(post.data.date)}</time>
+              <span class="font-medium group-hover:underline underline-offset-2 text-sm">
+                {post.data.title}
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Layout>

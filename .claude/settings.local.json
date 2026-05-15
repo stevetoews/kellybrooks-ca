@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --version)",
+      "PowerShell(Get-Location; ls C:\\\\Users\\\\stoew\\\\KELLYBROOOKS -ErrorAction SilentlyContinue; node --version)",
+      "PowerShell(npm *)",
+      "PowerShell(pnpm *)"
+    ]
+  }
+}

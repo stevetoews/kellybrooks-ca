@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prose styles for scraped WP content */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.prose p {
+  margin: 0 0 1rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.prose h2, .prose h3, .prose h4 {
+  font-weight: 500;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  opacity: 0.7;
+}
+
+/* Strip WP theme wrapper chrome that leaks through */
+.prose .container, .prose #single_cont,
+.prose .single_left, .prose .single_inside_content,
+.prose .next_prev_cont, .prose .clear {
+  all: unset;
+  display: block;
+}
+
+.prose .next_prev_cont { display: none !important; }
