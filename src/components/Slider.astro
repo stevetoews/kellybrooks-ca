@@ -1,0 +1,145 @@
+---
+interface Props {
+  images: string[];
+  label?: string;
+}
+const { images, label = 'Slideshow' } = Astro.props;
+---
+
+<figure class="slider" aria-label={label}>
+  <div class="slider-track">
+    {images.map((src, i) => (
+      <div class="slider-slide" data-index={i} aria-hidden={i !== 0}>
+        <img
+          src={src}
+          alt=""
+          loading={i === 0 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </div>
+    ))}
+  </div>
+
+  {images.length > 1 && (
+    <>
+      <button class="slider-btn slider-prev" aria-label="Previous photo">&#8592;</button>
+      <button class="slider-btn slider-next" aria-label="Next photo">&#8594;</button>
+
+      <div class="slider-dots" role="tablist" aria-label="Photo navigation">
+        {images.map((_, i) => (
+          <button
+            class="slider-dot"
+            role="tab"
+            aria-label={`Photo ${i + 1}`}
+            data-dot={i}
+          />
+        ))}
+      </div>
+    </>
+  )}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.slider').forEach(slider => {
+    const slides = slider.querySelectorAll<HTMLElement>('.slider-slide');
+    const dots = slider.querySelectorAll<HTMLButtonElement>('.slider-dot');
+    let current = 0;
+
+    function go(n: number) {
+      slides[current].classList.remove('active');
+      slides[current].setAttribute('aria-hidden', 'true');
+      dots[current]?.classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      slides[current].setAttribute('aria-hidden', 'false');
+      dots[current]?.classList.add('active');
+    }
+
+    // Init
+    slides[0].classList.add('active');
+    dots[0]?.classList.add('active');
+
+    slider.querySelector('.slider-prev')?.addEventListener('click', () => go(current - 1));
+    slider.querySelector('.slider-next')?.addEventListener('click', () => go(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => go(i)));
+  });
+</script>
+
+<style>
+  .slider {
+    position: relative;
+    margin: 0;
+    user-select: none;
+  }
+
+  .slider-track {
+    position: relative;
+    aspect-ratio: 960 / 600;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .slider-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  .slider-slide.active {
+    opacity: 1;
+  }
+
+  .slider-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Arrows */
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.72);
+    border: none;
+    padding: 10px 16px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #222;
+    line-height: 1;
+    transition: background 0.2s;
+  }
+
+  .slider-btn:hover {
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .slider-prev { left: 0; }
+  .slider-next { right: 0; }
+
+  /* Dots */
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0 4px;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+  }
+
+  .slider-dot.active {
+    background: #444;
+  }
+</style>

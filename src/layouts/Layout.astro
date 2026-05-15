@@ -19,20 +19,19 @@ const siteTitle = title === 'Kelly Brooks' ? title : `${title} — Kelly Brooks`
     <title>{siteTitle}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-white text-ink font-sans antialiased">
-    <slot name="header-above" />
+  <body class="bg-white text-[#222] antialiased">
     <header class="border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <a href="/" class="text-2xl font-medium tracking-tight hover:opacity-60 transition-opacity">
+        <a href="/" class="site-logo">
           Kelly Brooks
         </a>
         <nav aria-label="Main navigation">
-          <ul class="flex gap-7 text-sm">
-            <li><a href="/shows/" class="hover:opacity-60 transition-opacity">Shows</a></li>
-            <li><a href="/bio/" class="hover:opacity-60 transition-opacity">Bio</a></li>
-            <li><a href="/contact/" class="hover:opacity-60 transition-opacity">Contact</a></li>
+          <ul class="flex gap-8 site-nav">
+            <li><a href="/shows/">Shows</a></li>
+            <li><a href="/bio/">Bio</a></li>
+            <li><a href="/contact/">Contact</a></li>
           </ul>
         </nav>
       </div>
@@ -43,7 +42,7 @@ const siteTitle = title === 'Kelly Brooks' ? title : `${title} — Kelly Brooks`
     </main>
 
     <footer class="border-t border-gray-100 mt-20">
-      <div class="max-w-7xl mx-auto px-6 py-8 text-center text-xs text-gray-400">
+      <div class="max-w-7xl mx-auto px-6 py-8 text-center footer-copy">
         All images are copyright Kelly Brooks. &copy; 2010&thinsp;&ndash;&thinsp;2022 Kelly Brooks
       </div>
     </footer>

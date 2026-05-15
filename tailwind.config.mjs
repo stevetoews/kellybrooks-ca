@@ -4,10 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-      },
-      colors: {
-        ink: '#2c2c2c',
+        sans: ['Lato', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },

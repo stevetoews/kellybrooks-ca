@@ -2,38 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Prose styles for scraped WP content */
+/* ── Base typography (matches source site: Lato, weight 300/400) ── */
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ── Site logo ── */
+.site-logo {
+  font-family: 'Lato', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #222;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.site-logo:hover { opacity: 0.55; }
+
+/* ── Nav links ── */
+.site-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-nav a {
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #222;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.site-nav a:hover { opacity: 0.55; }
+
+/* ── Footer ── */
+.footer-copy {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: #aaa;
+}
+
+/* ── Prose: page body text (matches .single_left) ── */
+.prose {
+  font-family: 'Lato', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: #222;
+  line-height: 1.7;
+}
+
+.prose p {
+  margin: 0 0 1em;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  margin: 1.4em 0 0.5em;
+}
+
+.prose a {
+  color: #222;
+  text-decoration: none;
+  border-bottom: 1px solid #ddd;
+  transition: border-color 0.2s;
+}
+
+.prose a:hover {
+  border-bottom-color: #222;
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin: 0 0 1em;
+}
+
+.prose li {
+  margin-bottom: 0.4em;
+}
+
 .prose img {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 1.5rem auto;
+  margin: 1.5em auto;
 }
 
-.prose p {
-  margin: 0 0 1rem;
-  line-height: 1.75;
-  color: #374151;
-}
-
-.prose h2, .prose h3, .prose h4 {
-  font-weight: 500;
-  margin: 1.5rem 0 0.5rem;
-}
-
-.prose a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.prose a:hover {
-  opacity: 0.7;
-}
-
-/* Strip WP theme wrapper chrome that leaks through */
-.prose .container, .prose #single_cont,
-.prose .single_left, .prose .single_inside_content,
-.prose .next_prev_cont, .prose .clear {
+/* Strip WP theme wrapper divs that leak through in set:html content */
+.prose .container,
+.prose #single_cont,
+.prose .single_left,
+.prose .single_full,
+.prose .single_inside_content,
+.prose .clear {
   all: unset;
   display: block;
 }

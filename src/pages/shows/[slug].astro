@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Slider from '../../components/Slider.astro';
 
 export async function getStaticPaths() {
   const shows = await getCollection('shows');
@@ -17,81 +18,80 @@ const { Content } = await render(show);
 
 <Layout title={data.title}>
   <article class="max-w-4xl mx-auto px-6 py-16">
-    <p class="text-sm text-gray-400 mb-4">
-      <a href="/shows/" class="hover:opacity-60 transition-opacity">&larr; Shows</a>
+    <p class="text-sm back-link mb-4">
+      <a href="/shows/">&larr; Shows</a>
     </p>
 
     <header class="mb-8">
-      <h1 class="text-2xl font-medium">{data.title}</h1>
+      <h1>{data.title}</h1>
       {data.date && (
-        <p class="text-sm text-gray-400 mt-1">
+        <p class="show-date">
           {new Date(data.date + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'long' })}
         </p>
       )}
     </header>
 
-    {data.image && (
-      <figure class="mb-8">
-        <img
-          src={data.image}
-          alt={data.title}
-          loading="eager"
-          decoding="async"
-          class="w-full h-auto"
-        />
-      </figure>
+    {data.gallery && data.gallery.length > 0 && (
+      <div class="mb-10">
+        <Slider images={data.gallery} label={`${data.title} opening night photos`} />
+      </div>
     )}
 
-    <div class="prose prose-sm max-w-none mb-12">
+    <div class="show-body">
       <Content />
     </div>
-
-    {data.gallery && data.gallery.length > 0 && (
-      <section aria-label="Opening night photos">
-        <div class="show-gallery">
-          {data.gallery.map((src, i) => (
-            <figure class="show-gallery-item">
-              <img
-                src={src}
-                alt=""
-                loading={i < 2 ? 'eager' : 'lazy'}
-                decoding="async"
-                class="w-full h-auto"
-              />
-            </figure>
-          ))}
-        </div>
-      </section>
-    )}
   </article>
 </Layout>
 
 <style>
-  .show-gallery {
-    columns: 1;
-    column-gap: 8px;
-  }
-
-  .show-gallery-item {
-    break-inside: avoid;
+  h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #222;
     margin: 0 0 8px;
   }
 
-  .show-gallery-item img {
-    display: block;
-    width: 100%;
-    height: auto;
+  .show-date {
+    font-size: 14px;
+    color: #888;
+    letter-spacing: 0.5px;
+    margin: 0;
   }
 
-  @media (min-width: 640px) {
-    .show-gallery {
-      columns: 2;
-    }
+  .back-link a {
+    color: #888;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-size: 13px;
   }
 
-  @media (min-width: 900px) {
-    .show-gallery {
-      columns: 3;
-    }
+  .back-link a:hover {
+    color: #222;
+  }
+
+  .show-body {
+    font-family: 'Lato', sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: #222;
+    line-height: 1.7;
+  }
+
+  .show-body :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .show-body :global(a) {
+    color: #222;
+    text-decoration: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .show-body :global(a:hover) {
+    border-bottom-color: #222;
   }
 </style>
