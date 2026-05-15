@@ -2,11 +2,12 @@
 interface Props {
   images: string[];
   label?: string;
+  interval?: number; // ms between auto-advances, default 5000
 }
-const { images, label = 'Slideshow' } = Astro.props;
+const { images, label = 'Slideshow', interval = 5000 } = Astro.props;
 ---
 
-<figure class="slider" aria-label={label}>
+<figure class="slider" aria-label={label} data-interval={interval}>
   <div class="slider-track">
     {images.map((src, i) => (
       <div class="slider-slide" data-index={i} aria-hidden={i !== 0}>
@@ -41,9 +42,11 @@ const { images, label = 'Slideshow' } = Astro.props;
 
 <script>
   document.querySelectorAll<HTMLElement>('.slider').forEach(slider => {
-    const slides = slider.querySelectorAll<HTMLElement>('.slider-slide');
-    const dots = slider.querySelectorAll<HTMLButtonElement>('.slider-dot');
-    let current = 0;
+    const slides  = slider.querySelectorAll<HTMLElement>('.slider-slide');
+    const dots    = slider.querySelectorAll<HTMLButtonElement>('.slider-dot');
+    const ms      = Number(slider.dataset.interval) || 5000;
+    let current   = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
 
     function go(n: number) {
       slides[current].classList.remove('active');
@@ -55,13 +58,32 @@ const { images, label = 'Slideshow' } = Astro.props;
       dots[current]?.classList.add('active');
     }
 
-    // Init
+    function startAuto() {
+      timer = setInterval(() => go(current + 1), ms);
+    }
+
+    function stopAuto() {
+      if (timer !== null) { clearInterval(timer); timer = null; }
+    }
+
+    function manualGo(n: number) {
+      stopAuto();
+      go(n);
+      startAuto();
+    }
+
+    // Initialise
     slides[0].classList.add('active');
     dots[0]?.classList.add('active');
+    startAuto();
 
-    slider.querySelector('.slider-prev')?.addEventListener('click', () => go(current - 1));
-    slider.querySelector('.slider-next')?.addEventListener('click', () => go(current + 1));
-    dots.forEach((dot, i) => dot.addEventListener('click', () => go(i)));
+    slider.querySelector('.slider-prev')?.addEventListener('click', () => manualGo(current - 1));
+    slider.querySelector('.slider-next')?.addEventListener('click', () => manualGo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => manualGo(i)));
+
+    // Pause on hover
+    slider.addEventListener('mouseenter', stopAuto);
+    slider.addEventListener('mouseleave', startAuto);
   });
 </script>
 
@@ -76,14 +98,14 @@ const { images, label = 'Slideshow' } = Astro.props;
     position: relative;
     aspect-ratio: 960 / 600;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #f0f0f0;
   }
 
   .slider-slide {
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.7s ease;
+    transition: opacity 1.6s ease;
   }
 
   .slider-slide.active {
@@ -103,7 +125,7 @@ const { images, label = 'Slideshow' } = Astro.props;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.65);
     border: none;
     padding: 10px 16px;
     font-size: 20px;
@@ -114,7 +136,7 @@ const { images, label = 'Slideshow' } = Astro.props;
   }
 
   .slider-btn:hover {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .slider-prev { left: 0; }
@@ -129,17 +151,17 @@ const { images, label = 'Slideshow' } = Astro.props;
   }
 
   .slider-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     border: none;
     background: #ccc;
     cursor: pointer;
     padding: 0;
-    transition: background 0.2s;
+    transition: background 0.3s;
   }
 
   .slider-dot.active {
-    background: #444;
+    background: #555;
   }
 </style>

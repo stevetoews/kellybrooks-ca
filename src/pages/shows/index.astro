@@ -1,53 +1,26 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Slider from '../../components/Slider.astro';
 import showsData from '../../data/pages/shows.json';
 
-const shows = await getCollection('shows');
-shows.sort((a, b) => {
-  const da = a.data.date || '';
-  const db = b.data.date || '';
-  return db.localeCompare(da);
-});
+const SHOWS_SLIDER = [
+  '/images/mt-vernon-1024-960x600.jpg',
+  '/images/waterfront-1024-960x600.jpg',
+  '/images/group-1024-960x600.jpg',
+];
 ---
 
 <Layout title="Shows">
   <div class="max-w-4xl mx-auto px-6 py-16">
     <h1 class="page-title">Shows</h1>
 
-    {showsData.html && (
-      <div class="prose shows-intro mb-14" set:html={showsData.html} />
-    )}
+    <div class="mb-12">
+      <Slider images={SHOWS_SLIDER} label="Exhibition photos" interval={5000} />
+    </div>
 
-    <ul class="show-list">
-      {shows.map((show) => {
-        const thumb = show.data.gallery?.[0] ?? show.data.image;
-        return (
-          <li>
-            <a href={`/shows/${show.id}/`} class="show-card">
-              {thumb && (
-                <div class="show-thumb">
-                  <img
-                    src={thumb}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              )}
-              <div class="show-meta">
-                {show.data.date && (
-                  <span class="show-year">
-                    {new Date(show.data.date + 'T12:00:00').getFullYear()}
-                  </span>
-                )}
-                <span class="show-name">{show.data.title}</span>
-              </div>
-            </a>
-          </li>
-        );
-      })}
-    </ul>
+    {showsData.html && (
+      <div class="prose" set:html={showsData.html} />
+    )}
   </div>
 </Layout>
 
@@ -60,80 +33,5 @@ shows.sort((a, b) => {
     text-transform: uppercase;
     color: #222;
     margin: 0 0 32px;
-  }
-
-  .shows-intro {
-    max-width: 680px;
-  }
-
-  .show-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .show-card {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  @media (min-width: 600px) {
-    .show-card {
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 24px;
-    }
-  }
-
-  .show-thumb {
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 280px;
-    overflow: hidden;
-  }
-
-  .show-thumb img {
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: opacity 0.25s;
-  }
-
-  .show-card:hover .show-thumb img {
-    opacity: 0.85;
-  }
-
-  .show-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-top: 4px;
-  }
-
-  .show-year {
-    font-family: 'Lato', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    color: #999;
-  }
-
-  .show-name {
-    font-family: 'Lato', sans-serif;
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 1.5px;
-    color: #222;
-    transition: opacity 0.2s;
-  }
-
-  .show-card:hover .show-name {
-    opacity: 0.6;
   }
 </style>
