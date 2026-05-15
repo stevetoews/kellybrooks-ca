@@ -16,7 +16,7 @@ const { Content } = await render(show);
 ---
 
 <Layout title={data.title}>
-  <article class="max-w-3xl mx-auto px-6 py-16">
+  <article class="max-w-4xl mx-auto px-6 py-16">
     <p class="text-sm text-gray-400 mb-4">
       <a href="/shows/" class="hover:opacity-60 transition-opacity">&larr; Shows</a>
     </p>
@@ -42,8 +42,56 @@ const { Content } = await render(show);
       </figure>
     )}
 
-    <div class="prose prose-sm max-w-none">
+    <div class="prose prose-sm max-w-none mb-12">
       <Content />
     </div>
+
+    {data.gallery && data.gallery.length > 0 && (
+      <section aria-label="Opening night photos">
+        <div class="show-gallery">
+          {data.gallery.map((src, i) => (
+            <figure class="show-gallery-item">
+              <img
+                src={src}
+                alt=""
+                loading={i < 2 ? 'eager' : 'lazy'}
+                decoding="async"
+                class="w-full h-auto"
+              />
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
   </article>
 </Layout>
+
+<style>
+  .show-gallery {
+    columns: 1;
+    column-gap: 8px;
+  }
+
+  .show-gallery-item {
+    break-inside: avoid;
+    margin: 0 0 8px;
+  }
+
+  .show-gallery-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (min-width: 640px) {
+    .show-gallery {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .show-gallery {
+      columns: 3;
+    }
+  }
+</style>

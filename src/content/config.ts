@@ -19,6 +19,7 @@ const shows = defineCollection({
     title: z.string(),
     date: z.string().optional(),
     image: z.string().optional(),
+    gallery: z.array(z.string()).optional(),
   }),
 });
 

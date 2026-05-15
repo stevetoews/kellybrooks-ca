@@ -6,11 +6,23 @@ import bioData from '../../data/pages/bio.json';
 <Layout title="Bio">
   <div class="max-w-2xl mx-auto px-6 py-16">
     <h1 class="text-2xl font-medium mb-8">Bio</h1>
+
+    <figure class="mb-8">
+      <img
+        src="/images/paris-10241-960x600.jpg"
+        alt="Kelly Brooks"
+        loading="eager"
+        decoding="async"
+        class="w-full h-auto"
+      />
+    </figure>
+
     {bioData.html ? (
       <div class="prose prose-sm max-w-none" set:html={bioData.html} />
     ) : (
       <p class="text-gray-500 italic">Bio coming soon.</p>
     )}
+
     <p class="mt-10 text-sm">
       <a href="/bio/artists-statement/" class="underline underline-offset-2 hover:opacity-60 transition-opacity">
         Artist's Statement &rarr;
