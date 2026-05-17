@@ -1,0 +1,38 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Contact' } = Astro.props;
+---
+
+<section class="max-w-2xl mx-auto px-6 py-16">
+  <h1 class="page-title">{title}</h1>
+
+  <div class="prose">
+    <p>
+      Enquiries about my paintings are welcome. You can contact me by email:
+      <a href="mailto:kelly@kellybrooks.ca">kelly@kellybrooks.ca</a>
+    </p>
+    <p>or phone: 604.323.4197</p>
+    <p>or by post:</p>
+    <p>
+      Kelly Brooks<br />
+      18705 Porlier Pass Road<br />
+      Galiano Island, BC<br />
+      Canada&nbsp; V0N 1P0
+    </p>
+  </div>
+</section>
+
+<style>
+  .page-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #222;
+    margin: 0 0 32px;
+  }
+</style>
